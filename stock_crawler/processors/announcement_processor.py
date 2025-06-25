@@ -42,6 +42,13 @@ class AnnouncementProcessor:
         
         # 新增：根据关键词过滤公告标题
         if self.config_manager:
+            # 排除关键词优先
+            exclude_keywords = self.config_manager.notice_title_exclude_keywords
+            if exclude_keywords:
+                if any(kw in notice_title for kw in exclude_keywords):
+                    print(f"公告标题命中排除关键词，跳过: {notice_title}")
+                    return
+            # 包含关键词
             keywords = self.config_manager.notice_title_keywords
             if keywords:
                 if not any(kw in notice_title for kw in keywords):
@@ -64,3 +71,4 @@ class AnnouncementProcessor:
         if self.pdf_downloader.should_download_pdf(filename, attach_size):
             print(f"开始下载PDF: {os.path.basename(filename)}")
             self.pdf_downloader.download_pdf(attach_url, filename, attach_size) 
+            time.sleep(1)

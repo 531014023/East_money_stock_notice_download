@@ -82,7 +82,8 @@ pip install requests
     "cache_expire_days": 7,
     "download_dir": "downloads",
     "cache_dir": "cache",
-    "notice_title_keywords": ["分红", "回购"]
+    "notice_title_keywords": ["分红", "回购"],
+    "notice_title_exclude_keywords": ["年报", "第一季度报告"]
 }
 ```
 
@@ -95,6 +96,7 @@ pip install requests
 - `download_dir`: 下载目录路径 (可选，默认为"downloads")
 - `cache_dir`: 缓存目录路径 (可选，默认为"cache")
 - `notice_title_keywords`: 公告标题关键词，只有包含任一关键词的公告才会下载。支持字符串或字符串数组。例如：`"分红"` 或 `["分红", "回购"]`
+- `notice_title_exclude_keywords`: 公告标题排除关键词，只要包含任一关键词的公告就会跳过，只有全部都不包含才会判断`notice_title_keywords`。同样支持字符串。
 
 #### 公告大类（f_node）对照表
 

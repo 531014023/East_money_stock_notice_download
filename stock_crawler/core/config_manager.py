@@ -61,4 +61,16 @@ class ConfigManager:
             return [value]
         if isinstance(value, list):
             return value
+        return []
+    
+    @property
+    def notice_title_exclude_keywords(self):
+        """获取公告标题排除关键词，支持字符串或字符串列表"""
+        value = self.get('notice_title_exclude_keywords', None)
+        if value is None:
+            return []
+        if isinstance(value, str):
+            return [value]
+        if isinstance(value, list):
+            return value
         return [] 

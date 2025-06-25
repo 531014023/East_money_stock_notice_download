@@ -5,5 +5,15 @@
     "cache_expire_days": 7,
     "download_dir": "downloads",
     "cache_dir": "cache",
-    "notice_title_keywords": ["决议公告"]
+    "notice_title_keywords": [],
+    "notice_title_exclude_keywords": [
+        "年报", 
+        "第一季度报告",
+        "年度报告",
+        "半年度报告",
+        "半年报",
+        "中期报告",
+        "第三季度报告",
+        "季报全文"
+    ]
 } 
