@@ -4,5 +4,6 @@
     "s_node": "0",
     "cache_expire_days": 7,
     "download_dir": "downloads",
-    "cache_dir": "cache"
+    "cache_dir": "cache",
+    "notice_title_keywords": ["决议公告"]
 } 

@@ -52,7 +52,8 @@ class CrawlerFactory:
             self._announcement_processor = AnnouncementProcessor(
                 self.http_client, 
                 self.pdf_downloader,
-                download_dir=self.download_dir
+                download_dir=self.download_dir,
+                config_manager=self.config_manager
             )
         return self._announcement_processor
     

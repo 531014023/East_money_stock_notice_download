@@ -49,4 +49,16 @@ class ConfigManager:
     @property
     def cache_dir(self):
         """获取缓存目录"""
-        return self.get('cache_dir', 'cache') 
+        return self.get('cache_dir', 'cache')
+    
+    @property
+    def notice_title_keywords(self):
+        """获取公告标题关键词，支持字符串或字符串列表"""
+        value = self.get('notice_title_keywords', None)
+        if value is None:
+            return []
+        if isinstance(value, str):
+            return [value]
+        if isinstance(value, list):
+            return value
+        return [] 

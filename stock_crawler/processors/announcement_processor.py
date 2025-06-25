@@ -4,10 +4,11 @@ import time
 class AnnouncementProcessor:
     """公告处理类，负责处理单个公告的下载逻辑"""
     
-    def __init__(self, http_client, pdf_downloader, download_dir='downloads'):
+    def __init__(self, http_client, pdf_downloader, download_dir='downloads', config_manager=None):
         self.http_client = http_client
         self.pdf_downloader = pdf_downloader
         self.download_dir = download_dir
+        self.config_manager = config_manager
     
     def process_announcement(self, item):
         """处理单个公告"""
@@ -38,6 +39,14 @@ class AnnouncementProcessor:
         attach_size = int(data.get('data', {}).get('attach_size', ''))
         notice_title = data.get('data', {}).get('notice_title', '')
         notice_date = data.get('data', {}).get('notice_date', '')
+        
+        # 新增：根据关键词过滤公告标题
+        if self.config_manager:
+            keywords = self.config_manager.notice_title_keywords
+            if keywords:
+                if not any(kw in notice_title for kw in keywords):
+                    print(f"公告标题未匹配关键词，跳过: {notice_title}")
+                    return
         
         # 创建统一的下载文件夹结构
         column_name = item.get('columns')[0].get('column_name')
