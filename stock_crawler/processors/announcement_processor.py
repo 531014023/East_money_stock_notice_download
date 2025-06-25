@@ -75,4 +75,3 @@ class AnnouncementProcessor:
         if self.pdf_downloader.should_download_pdf(filename, attach_size):
             print(f"开始下载PDF: {os.path.basename(filename)}")
             self.pdf_downloader.download_pdf(attach_url, filename, attach_size) 
-            time.sleep(1)

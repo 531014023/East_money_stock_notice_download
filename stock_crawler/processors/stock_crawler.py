@@ -57,11 +57,10 @@ class StockCrawler:
                 
             for item in announcements:
                 self.announcement_processor.process_announcement(item)
-                time.sleep(1)
+                time.sleep(1) # 添加延迟避免被封 
             
             # 检查是否还有下一页
             if page_index * page_size >= total_hits:
                 break
                 
             page_index += 1
-            time.sleep(2)  # 添加延迟避免被封 
