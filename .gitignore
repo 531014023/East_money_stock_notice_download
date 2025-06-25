@@ -1,6 +1,9 @@
 # PDF存储目录 - 程序运行时生成的PDF文件
 *pdf/
 
+# 缓存目录 - 程序运行时生成的缓存文件
+cache/
+
 # Python相关
 __pycache__/
 *.py[cod]
