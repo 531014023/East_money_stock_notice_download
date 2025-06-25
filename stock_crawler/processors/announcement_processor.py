@@ -36,7 +36,11 @@ class AnnouncementProcessor:
         security = data.get('data', {}).get('security', {})[0]
         stock_code = security.get('stock', '')
         short_name = security.get('short_name', '')
-        attach_size = int(data.get('data', {}).get('attach_size', ''))
+        raw_attach_size = data.get('data', {}).get('attach_size', 0)
+        if raw_attach_size in (None, '', 'null'):
+            attach_size = 0
+        else:
+            attach_size = int(raw_attach_size)
         notice_title = data.get('data', {}).get('notice_title', '')
         notice_date = data.get('data', {}).get('notice_date', '')
         

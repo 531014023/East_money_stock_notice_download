@@ -16,7 +16,8 @@ class PdfDownloader:
         try:
             if not os.path.exists(filename):
                 return False, "文件不存在"
-            
+            if expected_size_kb == 0:
+                return True, "未提供期望大小，默认完整"
             file_size = os.path.getsize(filename)
             file_size_kb = round(file_size / 1000)
             
@@ -43,7 +44,7 @@ class PdfDownloader:
                     # 使用完整性检查函数
                     is_complete, message = self.check_pdf_integrity(filename, attach_size)
                     if is_complete:
-                        print(f"Successfully downloaded: {filename}")
+                        print(f"Successfully downloaded: {filename} ({message})")
                         break
                     else:
                         print(f"文件不完整: {message}，准备重试({attempt}/{max_retries})：{filename}")
