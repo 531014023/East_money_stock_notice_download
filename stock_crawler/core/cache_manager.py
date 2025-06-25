@@ -7,11 +7,11 @@ from urllib.parse import urlparse, parse_qs, urlencode
 class CacheManager:
     """缓存管理类，负责缓存文件的创建、读取、保存和清理"""
     
-    def __init__(self, cache_dir='cache', stock_code='unknown', expire_days=7):
-        self.cache_dir = cache_dir
+    def __init__(self, cache_dir=None, stock_code='unknown', expire_days=7):
+        self.cache_dir = cache_dir or 'cache'
         self.stock_code = stock_code
         self.expire_days = expire_days
-        self.stock_cache_dir = os.path.join(cache_dir, stock_code)
+        self.stock_cache_dir = os.path.join(self.cache_dir, stock_code)
         self._init_cache_dirs()
     
     def _init_cache_dirs(self):

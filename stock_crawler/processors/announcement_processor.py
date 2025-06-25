@@ -4,9 +4,10 @@ import time
 class AnnouncementProcessor:
     """公告处理类，负责处理单个公告的下载逻辑"""
     
-    def __init__(self, http_client, pdf_downloader):
+    def __init__(self, http_client, pdf_downloader, download_dir='downloads'):
         self.http_client = http_client
         self.pdf_downloader = pdf_downloader
+        self.download_dir = download_dir
     
     def process_announcement(self, item):
         """处理单个公告"""
@@ -38,9 +39,9 @@ class AnnouncementProcessor:
         notice_title = data.get('data', {}).get('notice_title', '')
         notice_date = data.get('data', {}).get('notice_date', '')
         
-        # 创建PDF文件夹
+        # 创建统一的下载文件夹结构
         column_name = item.get('columns')[0].get('column_name')
-        pdf_folder = f'{short_name}pdf/{column_name}'
+        pdf_folder = os.path.join(self.download_dir, short_name, column_name)
         if not os.path.exists(pdf_folder):
             os.makedirs(pdf_folder)
         
@@ -48,7 +49,7 @@ class AnnouncementProcessor:
         raw_filename = self.pdf_downloader.build_pdf_filename(
             stock_code, short_name, notice_title, notice_date
         )
-        filename = f"{pdf_folder}/{raw_filename}"
+        filename = os.path.join(pdf_folder, raw_filename)
         
         # 检查是否需要下载PDF
         if self.pdf_downloader.should_download_pdf(filename, attach_size):

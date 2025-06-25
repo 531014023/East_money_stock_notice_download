@@ -39,4 +39,14 @@ class ConfigManager:
     @property
     def cache_expire_days(self):
         """获取缓存过期天数"""
-        return self.get('cache_expire_days', 7) 
+        return self.get('cache_expire_days', 7)
+    
+    @property
+    def download_dir(self):
+        """获取下载目录"""
+        return self.get('download_dir', 'downloads')
+    
+    @property
+    def cache_dir(self):
+        """获取缓存目录"""
+        return self.get('cache_dir', 'cache') 

@@ -9,9 +9,11 @@ from .processors import AnnouncementProcessor, StockCrawler
 class CrawlerFactory:
     """爬虫工厂类，负责创建和管理爬虫实例"""
     
-    def __init__(self, config_file='config.json'):
+    def __init__(self, config_file='config.json', download_dir=None, cache_dir=None):
         self.config_file = config_file
-        self._config_manager = None
+        self.config_manager = ConfigManager(config_file)
+        self.download_dir = download_dir or self.config_manager.download_dir
+        self.cache_dir = cache_dir or self.config_manager.cache_dir
         self._cache_manager = None
         self._http_client = None
         self._pdf_downloader = None
@@ -19,18 +21,11 @@ class CrawlerFactory:
         self._stock_crawler = None
     
     @property
-    def config_manager(self):
-        """获取配置管理器实例"""
-        if self._config_manager is None:
-            self._config_manager = ConfigManager(self.config_file)
-        return self._config_manager
-    
-    @property
     def cache_manager(self):
         """获取缓存管理器实例"""
         if self._cache_manager is None:
             self._cache_manager = CacheManager(
-                cache_dir='cache',
+                cache_dir=self.cache_dir,
                 stock_code=self.config_manager.stock_code,
                 expire_days=self.config_manager.cache_expire_days
             )
@@ -56,7 +51,8 @@ class CrawlerFactory:
         if self._announcement_processor is None:
             self._announcement_processor = AnnouncementProcessor(
                 self.http_client, 
-                self.pdf_downloader
+                self.pdf_downloader,
+                download_dir=self.download_dir
             )
         return self._announcement_processor
     
@@ -78,7 +74,6 @@ class CrawlerFactory:
     
     def reset(self):
         """重置所有实例，用于重新初始化"""
-        self._config_manager = None
         self._cache_manager = None
         self._http_client = None
         self._pdf_downloader = None

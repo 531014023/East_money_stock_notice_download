@@ -19,9 +19,9 @@ def main():
         # 初始化配置管理器
         config_manager = ConfigManager('config.json')
         
-        # 初始化缓存管理器
+        # 初始化缓存管理器，使用配置文件中的缓存目录
         cache_manager = CacheManager(
-            cache_dir='cache',
+            cache_dir=config_manager.cache_dir,
             stock_code=config_manager.stock_code,
             expire_days=config_manager.cache_expire_days
         )
@@ -32,8 +32,12 @@ def main():
         # 初始化PDF下载器
         pdf_downloader = PdfDownloader()
         
-        # 初始化公告处理器
-        announcement_processor = AnnouncementProcessor(http_client, pdf_downloader)
+        # 初始化公告处理器，使用配置文件中的下载目录
+        announcement_processor = AnnouncementProcessor(
+            http_client, 
+            pdf_downloader, 
+            download_dir=config_manager.download_dir
+        )
         
         # 初始化爬虫
         crawler = StockCrawler(
@@ -45,6 +49,8 @@ def main():
         
         # 运行爬虫
         print(f"开始爬取股票 {config_manager.stock_code} 的公告...")
+        print(f"PDF文件将保存到: {config_manager.download_dir}/")
+        print(f"缓存文件将保存到: {config_manager.cache_dir}/")
         crawler.run()
         print("爬取完成！")
         

@@ -17,6 +17,8 @@ def main():
 使用示例:
   %(prog)s                    # 使用默认配置文件
   %(prog)s -c custom.json     # 使用自定义配置文件
+  %(prog)s -d custom_downloads # 使用自定义下载目录
+  %(prog)s --cache-dir custom_cache # 使用自定义缓存目录
   %(prog)s --version          # 显示版本信息
         """
     )
@@ -25,6 +27,16 @@ def main():
         '-c', '--config',
         default='config.json',
         help='配置文件路径 (默认: config.json)'
+    )
+    
+    parser.add_argument(
+        '-d', '--download-dir',
+        help='下载目录路径 (默认从配置文件读取)'
+    )
+    
+    parser.add_argument(
+        '--cache-dir',
+        help='缓存目录路径 (默认从配置文件读取)'
     )
     
     parser.add_argument(
@@ -48,8 +60,12 @@ def main():
     args = parser.parse_args()
     
     try:
-        # 创建工厂实例
-        factory = CrawlerFactory(args.config)
+        # 创建工厂实例，支持命令行参数覆盖配置文件
+        factory = CrawlerFactory(
+            config_file=args.config,
+            download_dir=args.download_dir,
+            cache_dir=args.cache_dir
+        )
         
         # 处理特殊命令
         if args.clean_cache:
@@ -76,6 +92,8 @@ def main():
         # 正常运行爬虫
         crawler = factory.create_crawler()
         print(f"开始爬取股票 {factory.config_manager.stock_code} 的公告...")
+        print(f"PDF文件将保存到: {factory.download_dir}/")
+        print(f"缓存文件将保存到: {factory.cache_dir}/")
         crawler.run()
         print("爬取完成！")
         

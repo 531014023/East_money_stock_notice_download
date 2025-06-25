@@ -44,8 +44,9 @@ East_money_stock_notice_download/
 ├── config.json                       # 配置文件
 ├── cache/                            # 缓存目录
 │   └── [股票代码]/                   # 按股票代码分类的缓存
-├── [股票名称]pdf/                    # PDF存储目录
-│   └── [公告类型]/                   # 按公告类型分类
+├── downloads/                        # 统一下载目录
+│   └── [股票简称]/                   # 按股票简称分类
+│       └── [公告类型]/               # 按公告类型分类
 └── readme.md                         # 说明文档
 ```
 
@@ -57,7 +58,9 @@ East_money_stock_notice_download/
 ├── test.py                           # 测试文件
 ├── config.json                       # 配置文件
 ├── cache/                            # 缓存目录
-├── [股票名称]pdf/                    # PDF存储目录
+├── downloads/                        # 统一下载目录
+│   └── [股票简称]/                   # 按股票简称分类
+│       └── [公告类型]/               # 按公告类型分类
 └── readme.md                         # 说明文档
 ```
 
@@ -76,7 +79,9 @@ pip install requests
     "stock_code": "600519",
     "f_node": "0",
     "s_node": "0",
-    "cache_expire_days": 7
+    "cache_expire_days": 7,
+    "download_dir": "downloads",
+    "cache_dir": "cache"
 }
 ```
 
@@ -86,6 +91,8 @@ pip install requests
 - `f_node`: 公告大类 (可选，默认为"0")
 - `s_node`: 公告小类 (可选，默认为"0")
 - `cache_expire_days`: 缓存过期天数 (可选，默认为7天)
+- `download_dir`: 下载目录路径 (可选，默认为"downloads")
+- `cache_dir`: 缓存目录路径 (可选，默认为"cache")
 
 ## 使用方法
 
@@ -97,6 +104,12 @@ python -m stock_crawler.cli
 
 # 使用自定义配置文件
 python -m stock_crawler.cli -c custom.json
+
+# 使用自定义下载目录
+python -m stock_crawler.cli -d custom_downloads
+
+# 使用自定义缓存目录
+python -m stock_crawler.cli --cache-dir custom_cache
 
 # 清理过期缓存
 python -m stock_crawler.cli --clean-cache
@@ -186,6 +199,22 @@ python main.py
 
 ## PDF下载
 
+### 下载目录结构
+```
+downloads/
+├── 贵州茅台/                    # 股票简称
+│   ├── 定期报告/               # 公告类型
+│   │   ├── 20240118_600519贵州茅台2023年年度报告.pdf
+│   │   └── 20240118_600519贵州茅台2023年第三季度报告.pdf
+│   ├── 业绩预告/
+│   │   └── 20240118_600519贵州茅台2023年业绩预告.pdf
+│   └── 重大事项/
+│       └── 20240118_600519贵州茅台关于公司治理的公告.pdf
+└── 其他股票/
+    └── [公告类型]/
+        └── [PDF文件]
+```
+
 ### 文件命名规则
 格式: `[日期]_[股票代码][股票简称][公告标题].pdf`
 
@@ -197,8 +226,9 @@ python main.py
 - 支持自动重试下载
 
 ### 分类存储
-- 按公告类型自动分类
-- 目录结构: `[股票简称]pdf/[公告类型]/`
+- 按股票简称和公告类型自动分类
+- 统一的下载目录结构
+- 避免根目录混乱
 
 ## 错误处理
 
@@ -325,6 +355,7 @@ pyinstaller --onefile main_factory.py
 - 实现工厂模式和依赖注入
 - 添加命令行接口
 - 支持作为Python包安装
+- 统一下载目录结构
 - 增强缓存管理功能
 - 优化错误处理机制
 

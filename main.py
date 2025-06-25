@@ -11,10 +11,17 @@ from datetime import datetime
 with open('config.json', 'r', encoding='utf-8') as f:
     config = json.load(f)
 
+# 从配置文件读取目录设置
+CACHE_DIR = config.get('cache_dir', 'cache')
+DOWNLOAD_DIR = config.get('download_dir', 'downloads')
+
 # 创建缓存目录
-CACHE_DIR = 'cache'
 if not os.path.exists(CACHE_DIR):
     os.makedirs(CACHE_DIR)
+
+# 创建统一下载目录
+if not os.path.exists(DOWNLOAD_DIR):
+    os.makedirs(DOWNLOAD_DIR)
 
 # 获取配置信息
 CACHE_EXPIRE_DAYS = config.get('cache_expire_days', 7)
@@ -296,9 +303,9 @@ def process_announcement(item):
     else:
         notice_date = ''
 
-    # 创建PDF文件夹
+    # 创建统一的下载文件夹结构
     column_name = item.get('columns')[0].get('column_name')
-    pdf_folder = f'{short_name}pdf/{column_name}'
+    pdf_folder = os.path.join(DOWNLOAD_DIR, short_name, column_name)
     if not os.path.exists(pdf_folder):
         os.makedirs(pdf_folder)
     
@@ -308,7 +315,7 @@ def process_announcement(item):
     if short_name and short_name not in notice_title:
         filename_prefix += short_name
     raw_filename = f"{notice_date}_{filename_prefix}{notice_title}.pdf"
-    filename = f"{pdf_folder}/{raw_filename}"
+    filename = os.path.join(pdf_folder, raw_filename)
     
     # 检查PDF文件是否已存在且完整
     if os.path.exists(filename):
@@ -385,6 +392,7 @@ def list_cache_files():
 def main():
     # 程序启动时清理过期缓存
     print(f"缓存过期天数设置: {CACHE_EXPIRE_DAYS}天")
+    print(f"PDF文件将保存到: {DOWNLOAD_DIR}/")
     clean_expired_cache()
     
     base_url = "https://np-anotice-stock.eastmoney.com/api/security/ann"

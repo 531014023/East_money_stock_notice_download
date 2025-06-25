@@ -2,5 +2,7 @@
     "stock_code": "600519",
     "f_node": "0",
     "s_node": "0",
-    "cache_expire_days": 7
+    "cache_expire_days": 7,
+    "download_dir": "downloads",
+    "cache_dir": "cache"
 } 

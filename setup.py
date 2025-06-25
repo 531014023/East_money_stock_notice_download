@@ -12,12 +12,12 @@ with open("readme.md", "r", encoding="utf-8") as fh:
 setup(
     name="stock-crawler",
     version="2.0.0",
-    author="Stock Crawler Team",
-    author_email="example@example.com",
+    author="duyong",
+    author_email="531014023@qq.com",
     description="一个用于爬取东方财富网站股票公告的Python爬虫工具",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/example/stock-crawler",
+    url="https://github.com/531014023/East_money_stock_notice_download",
     packages=find_packages(),
     classifiers=[
         "Development Status :: 4 - Beta",
